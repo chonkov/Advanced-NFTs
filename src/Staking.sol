@@ -18,7 +18,7 @@ contract Staking is Context, Ownable2Step, IERC721Receiver {
     }
 
     event TokenStaked(uint256 indexed tokenId, address operator, address from, bytes data);
-    event SetRewardToken(address previoudRewardToken, address newRewardToken);
+    event SetRewardToken(address previousRewardToken, address newRewardToken);
     event AcceptedOwnership(address rewardToken);
     event TransferredOwnership(address rewardToken, address newOwner);
     event Withdrawal(uint256 indexed tokenId, address indexed withdrawer);
@@ -71,16 +71,16 @@ contract Staking is Context, Ownable2Step, IERC721Receiver {
      */
     function claimRewards(uint256 _tokenId) external {
         Deposit memory _deposit = deposits[_tokenId];
+        address _rewardToken = rewardToken;
         if (_msgSender() != _deposit.owner) {
             revert InvalidOwner();
         }
 
         uint256 _calculatedRewards = calculateRewards(_deposit.lastRewardWithdrawal);
         uint96 _withdrawalTimestamp =
-            uint96(_calculatedRewards / (10 ** RewardToken(rewardToken).decimals() * 10) * SECONDS_IN_ONE_DAY);
-        //   _deposit.lastRewardWithdrawal = uint96(block.timestamp);
+            uint96(_calculatedRewards / (10 ** RewardToken(_rewardToken).decimals() * 10) * SECONDS_IN_ONE_DAY);
         _deposit.lastRewardWithdrawal += _withdrawalTimestamp;
-        RewardToken(rewardToken).mint(_msgSender(), _calculatedRewards);
+        RewardToken(_rewardToken).mint(_msgSender(), _calculatedRewards);
         deposits[_tokenId] = _deposit;
 
         emit RewardsClaimed(_tokenId, _msgSender(), _calculatedRewards);
@@ -106,10 +106,10 @@ contract Staking is Context, Ownable2Step, IERC721Receiver {
     }
 
     function setRewardToken(address newRewardToken) external onlyOwner {
-        address previoudRewardToken = rewardToken;
+        address previousRewardToken = rewardToken;
         rewardToken = newRewardToken; // Set new reward token for the staked NFTs
 
-        emit SetRewardToken(previoudRewardToken, newRewardToken);
+        emit SetRewardToken(previousRewardToken, newRewardToken);
     }
 
     function acceptOwnership(address _rewardToken) external onlyOwner {
