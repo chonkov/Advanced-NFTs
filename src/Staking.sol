@@ -19,10 +19,12 @@ contract Staking is Context, Ownable2Step, IERC721Receiver {
 
     event TokenStaked(uint256 indexed tokenId, address operator, address from, bytes data);
     event SetRewardToken(address previoudRewardToken, address newRewardToken);
-    event AcceptOwnership(address rewardToken);
+    event AcceptedOwnership(address rewardToken);
+    event TransferredOwnership(address rewardToken, address newOwner);
     event Withdrawal(uint256 indexed tokenId, address indexed withdrawer);
     event RewardsClaimed(uint256 indexed tokenId, address indexed claimer, uint256 amount);
 
+    uint256 SECONDS_IN_ONE_DAY = 86_400;
     address public immutable collection;
     address public rewardToken;
     mapping(uint256 => Deposit) public deposits;
@@ -74,7 +76,10 @@ contract Staking is Context, Ownable2Step, IERC721Receiver {
         }
 
         uint256 _calculatedRewards = calculateRewards(_deposit.lastRewardWithdrawal);
-        _deposit.lastRewardWithdrawal = uint96(block.timestamp);
+        uint96 _withdrawalTimestamp =
+            uint96(_calculatedRewards / (10 ** RewardToken(rewardToken).decimals() * 10) * SECONDS_IN_ONE_DAY);
+        //   _deposit.lastRewardWithdrawal = uint96(block.timestamp);
+        _deposit.lastRewardWithdrawal += _withdrawalTimestamp;
         RewardToken(rewardToken).mint(_msgSender(), _calculatedRewards);
         deposits[_tokenId] = _deposit;
 
@@ -110,7 +115,13 @@ contract Staking is Context, Ownable2Step, IERC721Receiver {
     function acceptOwnership(address _rewardToken) external onlyOwner {
         RewardToken(_rewardToken).acceptOwnership(); // Accept ownership of the token after first being approved
 
-        emit AcceptOwnership(_rewardToken);
+        emit AcceptedOwnership(_rewardToken);
+    }
+
+    function transferOwnership(address _rewardToken, address _newOwner) external onlyOwner {
+        RewardToken(_rewardToken).transferOwnership(_newOwner); // Accept ownership of the token after first being approved
+
+        emit TransferredOwnership(_rewardToken, _newOwner);
     }
 
     /**
@@ -120,7 +131,7 @@ contract Staking is Context, Ownable2Step, IERC721Receiver {
      */
     function calculateRewards(uint256 _lastRewardWithdrawal) public view returns (uint256) {
         uint256 _timeSinceLastWithdrawal = block.timestamp - _lastRewardWithdrawal;
-        uint256 _calculatedRewards = _timeSinceLastWithdrawal * 10 ether / 1 days;
+        uint256 _calculatedRewards = _timeSinceLastWithdrawal / 1 days * 10 ether;
         return _calculatedRewards;
     }
 }
