@@ -10,9 +10,11 @@ import {Ownable2Step, Ownable} from "lib/openzeppelin-contracts/contracts/access
 contract Collection is Ownable2Step, ERC721, ERC2981 {
     using MerkleProof for bytes32;
 
+    event Withdrawal();
+
     uint256 public constant SUPPLY = 21; // Intentional
-    uint256 public constant mintPrice = 1 ether;
-    uint256 public constant discountPrice = 0.5 ether; // If a minter is included in the merkle root
+    uint256 public constant MINT_PRICE = 1 ether;
+    uint256 public constant DISCOUNT_PRICE = 0.5 ether; // If a minter is included in the merkle root
     bytes32 public immutable merkleRoot;
     uint256 public ticket = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF; // In the collection there are going to be 256 tickets
     uint256 public currentTokenId = 1;
@@ -26,11 +28,11 @@ contract Collection is Ownable2Step, ERC721, ERC2981 {
     }
 
     /**
-     * @notice Mint NFT with price = mintPrice (1 ether)
-     * @return currentTokenId
+     * @notice Mint NFT with price = MINT_PRICE (1 ether)
+     * @return Incremented `currentTokenId`
      */
     function mint() external payable returns (uint256) {
-        require(msg.value == mintPrice, "Invalid mintPrice");
+        require(msg.value == MINT_PRICE, "Invalid MINT_PRICE");
 
         uint256 _currentTokenId = currentTokenId;
         require(_currentTokenId < SUPPLY, "CAN NOT mint more than SUPPLY");
@@ -44,9 +46,10 @@ contract Collection is Ownable2Step, ERC721, ERC2981 {
 
     function presaleMint(uint256 _ticket, bytes32[] memory _merkleProof) external payable returns (uint256) {
         bytes32 leaf = keccak256(abi.encode(_msgSender(), _ticket));
+        _ticket--; // Token indexes start at 1, but tickets at 0
         uint256 ticketCached = ticket;
-        require(leaf.verify(_merkleProof, merkleRoot, _ticket - 1), "Invalid proof");
-        require(msg.value == discountPrice, "Invalid discountPrice");
+        require(leaf.verify(_merkleProof, merkleRoot, _ticket), "Invalid proof");
+        require(msg.value == DISCOUNT_PRICE, "Invalid DISCOUNT_PRICE");
         require((ticketCached >> _ticket & uint256(1)) == 1, "Ticket already used");
         ticketCached = ticketCached & ~(uint256(1) << _ticket);
         ticket = ticketCached;
@@ -73,5 +76,7 @@ contract Collection is Ownable2Step, ERC721, ERC2981 {
     function withdrawEther() external onlyOwner {
         (bool success,) = owner().call{value: address(this).balance}("");
         require(success, "Unsuccessful transfer");
+
+        emit Withdrawal();
     }
 }
