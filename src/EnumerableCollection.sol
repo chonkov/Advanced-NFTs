@@ -5,8 +5,11 @@ import {ERC721Enumerable} from "lib/openzeppelin-contracts/contracts/token/ERC72
 import {ERC721} from "lib/openzeppelin-contracts/contracts/token/ERC721/ERC721.sol";
 import {IERC721} from "lib/openzeppelin-contracts/contracts/token/ERC721/IERC721.sol";
 import {Ownable} from "lib/openzeppelin-contracts/contracts/access/Ownable.sol";
+import {PrimeNumbersEnumerable} from "./PrimeNumbersEnumerable.sol";
 
 contract EnumerableCollection is Ownable, ERC721Enumerable {
+    using PrimeNumbersEnumerable for ERC721Enumerable;
+
     uint256 public constant MINT_PRICE = 1 ether;
     uint256 public constant SUPPLY = 21;
     uint256 public currentTokenId = 1;
@@ -28,6 +31,10 @@ contract EnumerableCollection is Ownable, ERC721Enumerable {
         _safeMint(_msgSender(), _currentTokenId);
 
         return _currentTokenId;
+    }
+
+    function primeTokensBy(address _owner) public view returns (uint256) {
+        return ERC721Enumerable(this).enumeratePrimeNumberTokensForOwner(_owner);
     }
 
     function withdrawEther() external onlyOwner {

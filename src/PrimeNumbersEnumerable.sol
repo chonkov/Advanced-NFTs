@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.21;
 
-import {IERC721Enumerable} from "lib/openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import {ERC721Enumerable} from "lib/openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 
 library PrimeNumbersEnumerable {
     /**
@@ -10,7 +10,7 @@ library PrimeNumbersEnumerable {
      * @param _owner address Address to calculate the number of prime token indexes for
      * @return uint256 The number of prime number indexes owned by `_owner`
      */
-    function enumeratePrimeNumberTokensForOwner(IERC721Enumerable _collection, address _owner)
+    function enumeratePrimeNumberTokensForOwner(ERC721Enumerable _collection, address _owner)
         external
         view
         returns (uint256)
@@ -21,11 +21,6 @@ library PrimeNumbersEnumerable {
         for (uint256 i = 0; i < balanceOfOwner; ++i) {
             uint256 tokenNumber = _collection.tokenOfOwnerByIndex(_owner, i);
             unchecked {
-                if (tokenNumber % 2 == 0) {
-                    // if even number, not a Prime
-                    continue;
-                }
-
                 // 1 is not considered a prime number
                 if (tokenNumber == 1) {
                     continue;
@@ -34,6 +29,11 @@ library PrimeNumbersEnumerable {
                 // set 2 and 3 as prime numbers
                 if (tokenNumber == 2) {
                     primeNumbersBalance++;
+                    continue;
+                }
+
+                if (tokenNumber % 2 == 0) {
+                    // if even number, not a Prime
                     continue;
                 }
 

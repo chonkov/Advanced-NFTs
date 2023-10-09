@@ -123,7 +123,7 @@ contract CollectionTest is Test {
 
     function testMintFail() public {
         vm.prank(owner);
-        vm.expectRevert("Invalid mintPrice");
+        vm.expectRevert("Invalid MINT_PRICE");
         collection.mint{value: (1 ether + 1)}();
 
         vm.store(address(collection), bytes32(uint256(11)), bytes32(uint256(21)));
@@ -145,7 +145,7 @@ contract CollectionTest is Test {
         collection.presaleMint{value: 0.5 ether}(6, merkleProofUser6);
 
         merkleProofUser6[0] = copy;
-        vm.expectRevert("Invalid discountPrice");
+        vm.expectRevert("Invalid DISCOUNT_PRICE");
         collection.presaleMint{value: (0.5 ether + 1)}(6, merkleProofUser6);
 
         bytes32 value = vm.load(address(collection), bytes32(uint256(11)));
