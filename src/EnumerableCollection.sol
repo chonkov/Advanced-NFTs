@@ -10,6 +10,8 @@ import {PrimeNumbersEnumerable} from "./PrimeNumbersEnumerable.sol";
 contract EnumerableCollection is Ownable, ERC721Enumerable {
     using PrimeNumbersEnumerable for ERC721Enumerable;
 
+    event Withdrawal(address owner); // add address, because owner could be changed later
+
     uint256 public constant MINT_PRICE = 1 ether;
     uint256 public constant SUPPLY = 21;
     uint256 public currentTokenId = 1;
@@ -38,6 +40,9 @@ contract EnumerableCollection is Ownable, ERC721Enumerable {
     }
 
     function withdrawEther() external onlyOwner {
-        payable(owner()).transfer(address(this).balance);
+        (bool success,) = _msgSender().call{value: address(this).balance}("");
+        require(success, "Unsuccessful transfer");
+
+        emit Withdrawal(msg.sender);
     }
 }

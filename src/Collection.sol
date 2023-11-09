@@ -10,7 +10,7 @@ import {Ownable2Step, Ownable} from "lib/openzeppelin-contracts/contracts/access
 contract Collection is Ownable2Step, ERC721, ERC2981 {
     using MerkleProof for bytes32;
 
-    event Withdrawal();
+    event Withdrawal(address owner); // add address, because owner could be changed later
 
     uint256 public constant SUPPLY = 21; // Intentional
     uint256 public constant MINT_PRICE = 1 ether;
@@ -74,9 +74,9 @@ contract Collection is Ownable2Step, ERC721, ERC2981 {
     }
 
     function withdrawEther() external onlyOwner {
-        (bool success,) = owner().call{value: address(this).balance}("");
+        (bool success,) = msg.sender.call{value: address(this).balance}("");
         require(success, "Unsuccessful transfer");
 
-        emit Withdrawal();
+        emit Withdrawal(msg.sender);
     }
 }
