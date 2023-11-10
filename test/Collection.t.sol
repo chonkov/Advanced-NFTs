@@ -90,6 +90,12 @@ contract CollectionTest is Test {
         assertEq(type(uint256).max - collection.ticket(), 1);
     }
 
+    function testRoyaltyInfo() public {
+        (address receiver, uint256 amount) = collection.royaltyInfo(2, 10_000);
+        assertEq(receiver, owner);
+        assertEq(amount, 250);
+    }
+
     function testMint() public {
         vm.prank(owner);
         collection.mint{value: 1 ether}();
@@ -162,7 +168,7 @@ contract CollectionTest is Test {
     }
 
     function testWithdrawEtherFail() public {
-        vm.expectRevert(abi.encodeWithSignature("OwnableUnauthorizedAccount(address)", address(this)));
+        vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, address(this)));
         collection.withdrawEther();
 
         Dummy dummy = new Dummy();

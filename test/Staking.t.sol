@@ -3,7 +3,7 @@ pragma solidity 0.8.21;
 
 import {Test, console2} from "forge-std/Test.sol";
 import {Collection} from "../src/Collection.sol";
-import {Staking} from "../src/Staking.sol";
+import {Staking, Ownable} from "../src/Staking.sol";
 import {RewardToken} from "../src/RewardToken.sol";
 
 contract StakingTest is Test {
@@ -33,6 +33,11 @@ contract StakingTest is Test {
         assertEq(token.owner(), address(staking));
         assertEq(collection.ownerOf(1), owner);
         assertEq(collection.ownerOf(2), owner);
+    }
+
+    function testMintFail() public {
+        vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, address(this)));
+        token.mint(address(0), 0);
     }
 
     function testDirectNFTTransfer() public {
@@ -65,15 +70,18 @@ contract StakingTest is Test {
         uint256 calculatedRewards = staking.calculateRewards(currentTimestamp);
         assertEq(calculatedRewards, 0);
 
-        vm.warp(currentTimestamp + (3600 * 24));
+        vm.warp(currentTimestamp + 1 days);
+
+        calculatedRewards = staking.calculateRewards(currentTimestamp);
+        assertEq(calculatedRewards, 10 ether);
 
         currentTimestamp = block.timestamp;
-        calculatedRewards = staking.calculateRewards(1);
-        assertEq(calculatedRewards, 10 ether);
 
         vm.prank(owner);
         staking.claimRewards(2);
         assertEq(token.balanceOf(owner), 10 ether);
+        (, uint96 timestamp) = staking.deposits(2);
+        assertEq(timestamp, currentTimestamp);
     }
 
     function testWithdraw() public {
@@ -95,6 +103,15 @@ contract StakingTest is Test {
         staking.setRewardToken(address(token));
     }
 
+    function testSetRewardTokenFail() public {
+        vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, address(this)));
+        staking.setRewardToken(address(0));
+
+        vm.prank(owner);
+        vm.expectRevert(Staking.Staking_Zero_Address.selector);
+        staking.setRewardToken(address(0));
+    }
+
     function testTransferOwnership() public {
         vm.startPrank(owner);
         staking.transferOwnership(address(token), owner);
@@ -110,27 +127,40 @@ contract StakingTest is Test {
         assertEq(token.owner(), address(staking));
     }
 
+    function testTransferOwnershipFail() public {
+        vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, address(this)));
+        staking.transferOwnership(address(token), owner);
+    }
+
     function testOnERC721ReceivedFail() public {
         vm.prank(owner);
-        vm.expectRevert();
+        vm.expectRevert(Staking.Staking_Invalid_Caller.selector);
         staking.onERC721Received(owner, owner, 2, "");
     }
 
     function testClaimRewardsFail() public {
         vm.prank(address(456));
-        vm.expectRevert();
+        vm.expectRevert(Staking.Staking_Invalid_Owner.selector);
         staking.claimRewards(2);
     }
 
     function testWithdrawFail() public {
         vm.prank(address(456));
-        vm.expectRevert();
+        vm.expectRevert(Staking.Staking_Invalid_Owner.selector);
         staking.withdraw(2);
     }
 
     function testAcceptOwnershipFail() public {
+        vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, address(this)));
+        staking.acceptOwnership(address(token));
+
         vm.prank(owner);
         vm.expectRevert();
         staking.acceptOwnership(address(token));
+    }
+
+    function testDeploymentFail() public {
+        vm.expectRevert();
+        new Staking(address(0));
     }
 }

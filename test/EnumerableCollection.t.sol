@@ -2,13 +2,25 @@
 pragma solidity 0.8.21;
 
 import {Test, console2} from "forge-std/Test.sol";
-import {EnumerableCollection} from "../src/EnumerableCollection.sol";
+import {EnumerableCollection, Ownable} from "../src/EnumerableCollection.sol";
+
+contract Mock {
+    function mock(address collection) external {
+        EnumerableCollection(collection).withdrawEther();
+    }
+
+    receive() external payable {
+        revert();
+    }
+}
 
 contract EnumerableCollectionTest is Test {
     EnumerableCollection collection;
     address owner = address(123);
+    Mock mock;
 
     function setUp() public {
+        mock = new Mock();
         vm.prank(owner);
         collection = new EnumerableCollection("MyEnumerableCollection", "MEC");
     }
@@ -31,5 +43,23 @@ contract EnumerableCollectionTest is Test {
 
         collection.withdrawEther();
         assertEq(address(collection).balance, 0);
+    }
+
+    function testWithdrawEtherFail() public {
+        vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, address(this)));
+        collection.withdrawEther();
+
+        vm.deal(owner, 100 ether);
+        vm.startPrank(owner);
+
+        for (uint256 i = 0; i < 20; i++) {
+            collection.mint{value: 1 ether}();
+        }
+
+        collection.transferOwnership(address(mock));
+        vm.stopPrank();
+
+        vm.expectRevert("Unsuccessful transfer");
+        mock.mock(address(collection));
     }
 }
