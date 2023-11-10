@@ -45,6 +45,21 @@ contract EnumerableCollectionTest is Test {
         assertEq(address(collection).balance, 0);
     }
 
+    function testPrimeTokensEdgeCases() public {
+        vm.deal(owner, 100 ether);
+        vm.startPrank(owner);
+
+        collection.mint{value: 1 ether}();
+
+        assertEq(collection.balanceOf(owner), 1);
+        assertEq(collection.primeTokensBy(owner), 0);
+
+        collection.mint{value: 1 ether}();
+
+        assertEq(collection.balanceOf(owner), 2);
+        assertEq(collection.primeTokensBy(owner), 1);
+    }
+
     function testWithdrawEtherFail() public {
         vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, address(this)));
         collection.withdrawEther();

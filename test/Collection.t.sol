@@ -133,6 +133,7 @@ contract CollectionTest is Test {
         collection.mint{value: (1 ether + 1)}();
 
         vm.store(address(collection), bytes32(uint256(11)), bytes32(uint256(21)));
+        assertEq(collection.currentTokenId(), 21);
         vm.prank(owner);
         vm.expectRevert("CAN NOT mint more than SUPPLY");
         collection.mint{value: 1 ether}();

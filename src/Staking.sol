@@ -131,7 +131,7 @@ contract Staking is Ownable2Step, IERC721Receiver {
         // Let's assume as an exaple that block.timestamp == 1,900,000 and _lastRewardWithdrawal == 1,000,000
         // and one day has 100,000 second, rather than 86,400. DAILY_REWARD == 10 ether or 10 tokens per day (token has 18 decimals)
         uint256 _timeSinceLastWithdrawal = block.timestamp - _lastRewardWithdrawal; // 1,999,000 - 1,000,000 = 999,000
-        uint256 _calculatedRewards = _timeSinceLastWithdrawal / 1 days * DAILY_REWARD; // 999,000 / 100.000 = 1 * 10 ether
+        uint256 _calculatedRewards = _timeSinceLastWithdrawal / 1 days * DAILY_REWARD; // 999,000 / 100.000 = 9 * 10 ether
         return _calculatedRewards;
     }
 }
