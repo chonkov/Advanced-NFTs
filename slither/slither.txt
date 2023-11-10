@@ -1,0 +1,181 @@
+❓
+INFO:Detectors:
+
+Math.mulDiv(uint256,uint256,uint256) (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#123-202) has bitwise-xor operator ^ instead of the exponentiation operator \*_: - inverse = (3 _ denominator) ^ 2 (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#184)
+
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#incorrect-exponentiation
+
+❌ - Fixed
+INFO:Detectors:
+
+Math.mulDiv(uint256,uint256,uint256) (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#123-202) performs a multiplication on the result of a division: - denominator = denominator / twos (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#169) - inverse = (3 \_ denominator) ^ 2 (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#184)
+
+Math.mulDiv(uint256,uint256,uint256) (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#123-202) performs a multiplication on the result of a division: - denominator = denominator / twos (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#169) - inverse _= 2 - denominator _ inverse (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#188)
+
+Math.mulDiv(uint256,uint256,uint256) (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#123-202) performs a multiplication on the result of a division: - denominator = denominator / twos (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#169) - inverse _= 2 - denominator _ inverse (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#189)
+
+Math.mulDiv(uint256,uint256,uint256) (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#123-202) performs a multiplication on the result of a division: - denominator = denominator / twos (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#169) - inverse _= 2 - denominator _ inverse (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#190)
+
+Math.mulDiv(uint256,uint256,uint256) (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#123-202) performs a multiplication on the result of a division: - denominator = denominator / twos (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#169) - inverse _= 2 - denominator _ inverse (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#191)
+
+Math.mulDiv(uint256,uint256,uint256) (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#123-202) performs a multiplication on the result of a division: - denominator = denominator / twos (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#169) - inverse _= 2 - denominator _ inverse (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#192)
+
+Math.mulDiv(uint256,uint256,uint256) (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#123-202) performs a multiplication on the result of a division: - denominator = denominator / twos (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#169) - inverse _= 2 - denominator _ inverse (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#193)
+
+Math.mulDiv(uint256,uint256,uint256) (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#123-202) performs a multiplication on the result of a division: - prod0 = prod0 / twos (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#172) - result = prod0 \_ inverse (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#199)
+
+Staking.claimRewards(uint256) (src/Staking.sol#72-86) performs a multiplication on the result of a division: - \_withdrawalTimestamp = uint96(\_calculatedRewards / DAILY*REWARD * 86400) (src/Staking.sol#80)
+
+Staking.calculateRewards(uint256) (src/Staking.sol#131-137) performs a multiplication on the result of a division: - \_calculatedRewards = \_timeSinceLastWithdrawal / 86400 \_ DAILY_REWARD (src/Staking.sol#135)
+
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#divide-before-multiply
+
+❌ - Fixed
+INFO:Detectors:
+
+Reentrancy in Staking.claimRewards(uint256) (src/Staking.sol#72-86):
+
+External calls: - RewardToken(\_rewardToken).mint(\_msgSender(),\_calculatedRewards) (src/Staking.sol#82)
+
+State variables written after the call(s): - deposits[_tokenId] = \_deposit (src/Staking.sol#83)
+
+Staking.deposits (src/Staking.sol#30) can be used in cross function reentrancies: - Staking.claimRewards(uint256) (src/Staking.sol#72-86) - Staking.deposit(uint256) (src/Staking.sol#61-66) - Staking.deposits (src/Staking.sol#30) - Staking.onERC721Received(address,address,uint256,bytes) (src/Staking.sol#44-55) - Staking.withdraw(uint256) (src/Staking.sol#92-105)
+
+Reentrancy in Staking.withdraw(uint256) (src/Staking.sol#92-105):
+
+External calls: - RewardToken(rewardToken).mint(\_msgSender(),\_calculatedRewards) (src/Staking.sol#99) - IERC721(collection).safeTransferFrom(address(this),\_msgSender(),\_tokenId) (src/Staking.sol#100)
+
+State variables written after the call(s): - delete deposits[_tokenId] (src/Staking.sol#102)
+
+Staking.deposits (src/Staking.sol#30) can be used in cross function reentrancies: - Staking.claimRewards(uint256) (src/Staking.sol#72-86) - Staking.deposit(uint256) (src/Staking.sol#61-66) - Staking.deposits (src/Staking.sol#30) - Staking.onERC721Received(address,address,uint256,bytes) (src/Staking.sol#44-55) - Staking.withdraw(uint256) (src/Staking.sol#92-105)
+
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-1
+
+✅
+INFO:Detectors:
+Collection.constructor(string,string,bytes32,uint96).\_name (src/Collection.sol#22) shadows: - ERC721.\_name (lib/openzeppelin-contracts/contracts/token/ERC721/ERC721.sol#23) (state variable)
+Collection.constructor(string,string,bytes32,uint96).\_symbol (src/Collection.sol#22) shadows: - ERC721.\_symbol (lib/openzeppelin-contracts/contracts/token/ERC721/ERC721.sol#26) (state variable)
+EnumerableCollection.constructor(string,string).\_name (src/EnumerableCollection.sol#19) shadows: - ERC721.\_name (lib/openzeppelin-contracts/contracts/token/ERC721/ERC721.sol#23) (state variable)
+EnumerableCollection.constructor(string,string).\_symbol (src/EnumerableCollection.sol#19) shadows: - ERC721.\_symbol (lib/openzeppelin-contracts/contracts/token/ERC721/ERC721.sol#26) (state variable)
+EnumerableCollection.primeTokensBy(address).\_owner (src/EnumerableCollection.sol#38) shadows: - Ownable.\_owner (lib/openzeppelin-contracts/contracts/access/Ownable.sol#21) (state variable)
+RewardToken.constructor(string,string,address).\_name (src/RewardToken.sol#8) shadows: - ERC20.\_name (lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol#41) (state variable)
+RewardToken.constructor(string,string,address).\_symbol (src/RewardToken.sol#8) shadows: - ERC20.\_symbol (lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol#42) (state variable)
+RewardToken.constructor(string,string,address).\_owner (src/RewardToken.sol#8) shadows: - Ownable.\_owner (lib/openzeppelin-contracts/contracts/access/Ownable.sol#21) (state variable)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#local-variable-shadowing
+
+❌ - Fixed
+INFO:Detectors:
+Ownable2Step.transferOwnership(address).newOwner (lib/openzeppelin-contracts/contracts/access/Ownable2Step.sol#35) lacks a zero-check on : - \_pendingOwner = newOwner (lib/openzeppelin-contracts/contracts/access/Ownable2Step.sol#36)
+Staking.constructor(address).\_collection (src/Staking.sol#32) lacks a zero-check on : - collection = \_collection (src/Staking.sol#33)
+Staking.setRewardToken(address).newRewardToken (src/Staking.sol#107) lacks a zero-check on : - rewardToken = newRewardToken (src/Staking.sol#109)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#missing-zero-address-validation
+
+✅
+INFO:Detectors:
+PrimeNumbersEnumerable.enumeratePrimeNumberTokensForOwner(ERC721Enumerable,address) (src/PrimeNumbersEnumerable.sol#13-57) has external calls inside a loop: tokenNumber = \_collection.tokenOfOwnerByIndex(\_owner,i) (src/PrimeNumbersEnumerable.sol#22)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation/#calls-inside-a-loop
+
+✅
+INFO:Detectors:
+Reentrancy in Staking.acceptOwnership(address) (src/Staking.sol#114-118):
+External calls: - RewardToken(\_rewardToken).acceptOwnership() (src/Staking.sol#115)
+Event emitted after the call(s): - AcceptedOwnership(\_rewardToken) (src/Staking.sol#117)
+Reentrancy in Staking.claimRewards(uint256) (src/Staking.sol#72-86):
+External calls: - RewardToken(\_rewardToken).mint(\_msgSender(),\_calculatedRewards) (src/Staking.sol#82)
+Event emitted after the call(s): - RewardsClaimed(\_tokenId,\_msgSender(),\_calculatedRewards) (src/Staking.sol#85)
+Reentrancy in Staking.deposit(uint256) (src/Staking.sol#61-66):
+External calls: - IERC721(collection).transferFrom(\_msgSender(),address(this),\_tokenId) (src/Staking.sol#63)
+Event emitted after the call(s): - TokenStaked(\_tokenId,\_msgSender(),\_msgSender(),) (src/Staking.sol#65)
+Reentrancy in Staking.transferOwnership(address,address) (src/Staking.sol#120-124):
+External calls: - RewardToken(\_rewardToken).transferOwnership(\_newOwner) (src/Staking.sol#121)
+Event emitted after the call(s): - TransferredOwnership(\_rewardToken,\_newOwner) (src/Staking.sol#123)
+Reentrancy in Staking.withdraw(uint256) (src/Staking.sol#92-105):
+External calls: - RewardToken(rewardToken).mint(\_msgSender(),\_calculatedRewards) (src/Staking.sol#99) - IERC721(collection).safeTransferFrom(address(this),\_msgSender(),\_tokenId) (src/Staking.sol#100)
+Event emitted after the call(s): - Withdrawal(\_tokenId,\_msgSender()) (src/Staking.sol#104)
+Reentrancy in Collection.withdrawEther() (src/Collection.sol#76-81):
+External calls: - (success) = msg.sender.call{value: address(this).balance}() (src/Collection.sol#77)
+Event emitted after the call(s): - Withdrawal(msg.sender) (src/Collection.sol#80)
+Reentrancy in EnumerableCollection.withdrawEther() (src/EnumerableCollection.sol#42-47):
+External calls: - (success) = msg.sender.call{value: address(this).balance}() (src/EnumerableCollection.sol#43)
+Event emitted after the call(s): - Withdrawal(msg.sender) (src/EnumerableCollection.sol#46)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-3
+
+✅
+INFO:Detectors:
+Staking.claimRewards(uint256) (src/Staking.sol#72-86) uses timestamp for comparisons
+Dangerous comparisons: - \_msgSender() != \_deposit.owner (src/Staking.sol#75)
+Staking.withdraw(uint256) (src/Staking.sol#92-105) uses timestamp for comparisons
+Dangerous comparisons: - \_msgSender() != \_deposit.owner (src/Staking.sol#94)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#block-timestamp
+
+✅
+INFO:Detectors:
+ERC721.\_checkOnERC721Received(address,address,uint256,bytes) (lib/openzeppelin-contracts/contracts/token/ERC721/ERC721.sol#462-479) uses assembly - INLINE ASM (lib/openzeppelin-contracts/contracts/token/ERC721/ERC721.sol#473-475)
+Strings.toString(uint256) (lib/openzeppelin-contracts/contracts/utils/Strings.sol#24-44) uses assembly - INLINE ASM (lib/openzeppelin-contracts/contracts/utils/Strings.sol#30-32) - INLINE ASM (lib/openzeppelin-contracts/contracts/utils/Strings.sol#36-38)
+Math.mulDiv(uint256,uint256,uint256) (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#123-202) uses assembly - INLINE ASM (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#130-133) - INLINE ASM (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#154-161) - INLINE ASM (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#167-176)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#assembly-usage
+
+✅
+INFO:Detectors:
+Different versions of Solidity are used: - Version used: ['0.8.21', '^0.8.20'] - 0.8.21 (src/Collection.sol#2) - 0.8.21 (src/EnumerableCollection.sol#2) - 0.8.21 (src/MerkleProof.sol#2) - 0.8.21 (src/PrimeNumbersEnumerable.sol#2) - 0.8.21 (src/RewardToken.sol#2) - 0.8.21 (src/Staking.sol#2) - ^0.8.20 (lib/openzeppelin-contracts/contracts/access/Ownable.sol#4) - ^0.8.20 (lib/openzeppelin-contracts/contracts/access/Ownable2Step.sol#4) - ^0.8.20 (lib/openzeppelin-contracts/contracts/interfaces/IERC2981.sol#4) - ^0.8.20 (lib/openzeppelin-contracts/contracts/interfaces/draft-IERC6093.sol#3) - ^0.8.20 (lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol#4) - ^0.8.20 (lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol#4) - ^0.8.20 (lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol#4) - ^0.8.20 (lib/openzeppelin-contracts/contracts/token/ERC721/ERC721.sol#4) - ^0.8.20 (lib/openzeppelin-contracts/contracts/token/ERC721/IERC721.sol#4) - ^0.8.20 (lib/openzeppelin-contracts/contracts/token/ERC721/IERC721Receiver.sol#4) - ^0.8.20 (lib/openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721Enumerable.sol#4) - ^0.8.20 (lib/openzeppelin-contracts/contracts/token/ERC721/extensions/IERC721Enumerable.sol#4) - ^0.8.20 (lib/openzeppelin-contracts/contracts/token/ERC721/extensions/IERC721Metadata.sol#4) - ^0.8.20 (lib/openzeppelin-contracts/contracts/token/common/ERC2981.sol#4) - ^0.8.20 (lib/openzeppelin-contracts/contracts/utils/Context.sol#4) - ^0.8.20 (lib/openzeppelin-contracts/contracts/utils/Strings.sol#4) - ^0.8.20 (lib/openzeppelin-contracts/contracts/utils/introspection/ERC165.sol#4) - ^0.8.20 (lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol#4) - ^0.8.20 (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#4) - ^0.8.20 (lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol#4)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#different-pragma-directives-are-used
+
+✅
+INFO:Detectors:
+Pragma version^0.8.20 (lib/openzeppelin-contracts/contracts/access/Ownable.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts/contracts/access/Ownable2Step.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts/contracts/interfaces/IERC2981.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts/contracts/interfaces/draft-IERC6093.sol#3) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts/contracts/token/ERC721/ERC721.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts/contracts/token/ERC721/IERC721.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts/contracts/token/ERC721/IERC721Receiver.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721Enumerable.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts/contracts/token/ERC721/extensions/IERC721Enumerable.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts/contracts/token/ERC721/extensions/IERC721Metadata.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts/contracts/token/common/ERC2981.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts/contracts/utils/Context.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts/contracts/utils/Strings.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts/contracts/utils/introspection/ERC165.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts/contracts/utils/math/Math.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version^0.8.20 (lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol#4) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version0.8.21 (src/Collection.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version0.8.21 (src/EnumerableCollection.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version0.8.21 (src/MerkleProof.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version0.8.21 (src/PrimeNumbersEnumerable.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version0.8.21 (src/RewardToken.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+Pragma version0.8.21 (src/Staking.sol#2) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+solc-0.8.21 is not recommended for deployment
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#incorrect-versions-of-solidity
+
+✅
+INFO:Detectors:
+Low level call in Collection.withdrawEther() (src/Collection.sol#76-81): - (success) = msg.sender.call{value: address(this).balance}() (src/Collection.sol#77)
+Low level call in EnumerableCollection.withdrawEther() (src/EnumerableCollection.sol#42-47): - (success) = msg.sender.call{value: address(this).balance}() (src/EnumerableCollection.sol#43)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#low-level-calls
+
+✅
+INFO:Detectors:
+Parameter Collection.presaleMint(uint256,bytes32[]).\_ticket (src/Collection.sol#47) is not in mixedCase
+Parameter Collection.presaleMint(uint256,bytes32[]).\_merkleProof (src/Collection.sol#47) is not in mixedCase
+Parameter Collection.supportsInterface(bytes4).\_interfaceId (src/Collection.sol#72) is not in mixedCase
+Parameter EnumerableCollection.primeTokensBy(address).\_owner (src/EnumerableCollection.sol#38) is not in mixedCase
+Parameter PrimeNumbersEnumerable.enumeratePrimeNumberTokensForOwner(ERC721Enumerable,address).\_collection (src/PrimeNumbersEnumerable.sol#13) is not in mixedCase
+Parameter PrimeNumbersEnumerable.enumeratePrimeNumberTokensForOwner(ERC721Enumerable,address).\_owner (src/PrimeNumbersEnumerable.sol#13) is not in mixedCase
+Parameter RewardToken.mint(address,uint256).\_to (src/RewardToken.sol#10) is not in mixedCase
+Parameter RewardToken.mint(address,uint256).\_amount (src/RewardToken.sol#10) is not in mixedCase
+Parameter Staking.onERC721Received(address,address,uint256,bytes).\_operator (src/Staking.sol#44) is not in mixedCase
+Parameter Staking.onERC721Received(address,address,uint256,bytes).\_from (src/Staking.sol#44) is not in mixedCase
+Parameter Staking.onERC721Received(address,address,uint256,bytes).\_tokenId (src/Staking.sol#44) is not in mixedCase
+Parameter Staking.onERC721Received(address,address,uint256,bytes).\_data (src/Staking.sol#44) is not in mixedCase
+Parameter Staking.deposit(uint256).\_tokenId (src/Staking.sol#61) is not in mixedCase
+Parameter Staking.claimRewards(uint256).\_tokenId (src/Staking.sol#72) is not in mixedCase
+Parameter Staking.withdraw(uint256).\_tokenId (src/Staking.sol#92) is not in mixedCase
+Parameter Staking.acceptOwnership(address).\_rewardToken (src/Staking.sol#114) is not in mixedCase
+Parameter Staking.transferOwnership(address,address).\_rewardToken (src/Staking.sol#120) is not in mixedCase
+Parameter Staking.transferOwnership(address,address).\_newOwner (src/Staking.sol#120) is not in mixedCase
+Parameter Staking.calculateRewards(uint256).\_lastRewardWithdrawal (src/Staking.sol#131) is not in mixedCase
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#conformance-to-solidity-naming-conventions
