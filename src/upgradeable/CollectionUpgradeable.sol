@@ -14,9 +14,9 @@ contract Collection is Ownable2StepUpgradeable, ERC721Upgradeable, ERC2981Upgrad
 
     event Withdrawal(address owner); // add address, because owner could be changed later
 
-    uint256 public constant SUPPLY = 21; // Intentional
-    uint256 public constant MINT_PRICE = 1 ether;
-    uint256 public constant DISCOUNT_PRICE = 0.5 ether; // If a minter is included in the merkle root
+    uint256 public supply;
+    uint256 public mintPrice;
+    uint256 public discountPrice;
     bytes32 public merkleRoot;
     uint256 public ticket;
     uint256 public currentTokenId;
@@ -24,6 +24,9 @@ contract Collection is Ownable2StepUpgradeable, ERC721Upgradeable, ERC2981Upgrad
     function initialize(
         string memory _name,
         string memory _symbol,
+        uint256 _supply,
+        uint256 _mintPrice,
+        uint256 _discountPrice,
         bytes32 _merkleRoot,
         bytes32 _ticket,
         uint256 _currentTokenId,
@@ -31,6 +34,10 @@ contract Collection is Ownable2StepUpgradeable, ERC721Upgradeable, ERC2981Upgrad
     ) external initializer {
         __Ownable_init(_msgSender());
         __ERC721_init(_name, _symbol);
+
+        supply = _supply;
+        mintPrice = _mintPrice;
+        discountPrice = _discountPrice;
         merkleRoot = _merkleRoot;
         ticket = uint256(_ticket);
         currentTokenId = _currentTokenId;
@@ -38,14 +45,14 @@ contract Collection is Ownable2StepUpgradeable, ERC721Upgradeable, ERC2981Upgrad
     }
 
     /**
-     * @notice Mint NFT with price = MINT_PRICE (1 ether)
+     * @notice Mint NFT with price = mintPrice (1 ether)
      * @return Incremented `currentTokenId`
      */
     function mint() external payable returns (uint256) {
-        require(msg.value == MINT_PRICE, "Invalid MINT_PRICE");
+        require(msg.value == mintPrice, "Invalid mintPrice");
 
         uint256 _currentTokenId = currentTokenId;
-        require(_currentTokenId < SUPPLY, "CAN NOT mint more than SUPPLY");
+        require(_currentTokenId < supply, "CAN NOT mint more than supply");
         unchecked {
             currentTokenId = _currentTokenId + 1;
         }
@@ -59,13 +66,13 @@ contract Collection is Ownable2StepUpgradeable, ERC721Upgradeable, ERC2981Upgrad
         _ticket--; // Token indexes start at 1, but tickets at 0
         uint256 ticketCached = ticket;
         require(_merkleProof.verify(merkleRoot, leaf), "Invalid proof");
-        require(msg.value == DISCOUNT_PRICE, "Invalid DISCOUNT_PRICE");
+        require(msg.value == discountPrice, "Invalid discountPrice");
         require((ticketCached >> _ticket & uint256(1)) == 1, "Ticket already used");
         ticketCached = ticketCached & ~(uint256(1) << _ticket);
         ticket = ticketCached;
 
         uint256 _currentTokenId = currentTokenId;
-        require(_currentTokenId < SUPPLY, "CAN NOT mint more than SUPPLY");
+        require(_currentTokenId < supply, "CAN NOT mint more than supply");
         unchecked {
             currentTokenId = _currentTokenId + 1;
         }
