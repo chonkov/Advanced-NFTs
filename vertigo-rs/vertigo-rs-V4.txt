@@ -1,0 +1,863 @@
+Mutation testing report:
+Number of mutations:    78
+Killed:                 46 / 78
+
+Mutations:
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/EnumerableCollection.sol
+    Line nr: 25
+    Result: Killed
+    Original line:
+                 require(msg.value == MINT_PRICE, "Invalid MINT_PRICE");
+
+    Mutated line:
+                 require(msg.value != MINT_PRICE, "Invalid MINT_PRICE");
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/EnumerableCollection.sol
+    Line nr: 28
+    Result: Killed
+    Original line:
+                 require(_currentTokenId < SUPPLY, "CAN NOT mint more than SUPPLY");
+
+    Mutated line:
+                 require(_currentTokenId <= SUPPLY, "CAN NOT mint more than SUPPLY");
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/EnumerableCollection.sol
+    Line nr: 25
+    Result: Killed
+    Original line:
+                 require(msg.value == MINT_PRICE, "Invalid MINT_PRICE");
+
+    Mutated line:
+                 require(msg.value != MINT_PRICE, "Invalid MINT_PRICE");
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/EnumerableCollection.sol
+    Line nr: 28
+    Result: Killed
+    Original line:
+                 require(_currentTokenId < SUPPLY, "CAN NOT mint more than SUPPLY");
+
+    Mutated line:
+                 require(_currentTokenId >= SUPPLY, "CAN NOT mint more than SUPPLY");
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/EnumerableCollection.sol
+    Line nr: 30
+    Result: Killed
+    Original line:
+                     currentTokenId = _currentTokenId + 1;
+
+    Mutated line:
+                     currentTokenId = _currentTokenId - 1;
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/EnumerableCollection.sol
+    Line nr: 32
+    Result: Killed
+    Original line:
+                 _safeMint(_msgSender(), _currentTokenId);
+
+    Mutated line:
+                 
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/EnumerableCollection.sol
+    Line nr: 18
+    Result: Error
+    Original line:
+             constructor(string memory _name, string memory _symbol) Ownable(_msgSender()) ERC721(_name, _symbol) {}
+
+    Mutated line:
+             constructor(string memory _name, string memory _symbol)  ERC721(_name, _symbol) {}
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/EnumerableCollection.sol
+    Line nr: 18
+    Result: Error
+    Original line:
+             constructor(string memory _name, string memory _symbol) Ownable(_msgSender()) ERC721(_name, _symbol) {}
+
+    Mutated line:
+             constructor(string memory _name, string memory _symbol) Ownable(_msgSender())  {}
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/EnumerableCollection.sol
+    Line nr: 41
+    Result: Killed
+    Original line:
+             function withdrawEther() external onlyOwner {
+
+    Mutated line:
+             function withdrawEther() external  {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/MerkleProof.sol
+    Line nr: 10
+    Result: Killed
+    Original line:
+                     if (index % 2 == 0) {
+
+    Mutated line:
+                     if (index % 2 != 0) {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/MerkleProof.sol
+    Line nr: 7
+    Result: Killed
+    Original line:
+                 for (uint256 i = 0; i < proof.length; i++) {
+
+    Mutated line:
+                 for (uint256 i = 0; i <= proof.length; i++) {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/MerkleProof.sol
+    Line nr: 19
+    Result: Killed
+    Original line:
+                 return hash == root;
+
+    Mutated line:
+                 return hash != root;
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/MerkleProof.sol
+    Line nr: 10
+    Result: Killed
+    Original line:
+                     if (index % 2 == 0) {
+
+    Mutated line:
+                     if (index % 2 != 0) {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/MerkleProof.sol
+    Line nr: 7
+    Result: Killed
+    Original line:
+                 for (uint256 i = 0; i < proof.length; i++) {
+
+    Mutated line:
+                 for (uint256 i = 0; i >= proof.length; i++) {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/MerkleProof.sol
+    Line nr: 19
+    Result: Killed
+    Original line:
+                 return hash == root;
+
+    Mutated line:
+                 return hash != root;
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/MerkleProof.sol
+    Line nr: 16
+    Result: Killed
+    Original line:
+                     index = index / 2;
+
+    Mutated line:
+                     index = index * 2;
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Staking.sol
+    Line nr: 32
+    Result: Killed
+    Original line:
+                 if (address(_collection) == address(0)) revert Staking_Zero_Address();
+
+    Mutated line:
+                 if (address(_collection) != address(0)) revert Staking_Zero_Address();
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Staking.sol
+    Line nr: 106
+    Result: Killed
+    Original line:
+                 if (newRewardToken == address(0)) revert Staking_Zero_Address();
+
+    Mutated line:
+                 if (newRewardToken != address(0)) revert Staking_Zero_Address();
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Staking.sol
+    Line nr: 32
+    Result: Killed
+    Original line:
+                 if (address(_collection) == address(0)) revert Staking_Zero_Address();
+
+    Mutated line:
+                 if (address(_collection) != address(0)) revert Staking_Zero_Address();
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Staking.sol
+    Line nr: 48
+    Result: Killed
+    Original line:
+                 if (_msgSender() != address(collection)) {
+
+    Mutated line:
+                 if (_msgSender() == address(collection)) {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Staking.sol
+    Line nr: 75
+    Result: Killed
+    Original line:
+                 if (_msgSender() != _deposit.owner) revert Staking_Invalid_Owner();
+
+    Mutated line:
+                 if (_msgSender() == _deposit.owner) revert Staking_Invalid_Owner();
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Staking.sol
+    Line nr: 94
+    Result: Killed
+    Original line:
+                 if (_msgSender() != _deposit.owner) revert Staking_Invalid_Owner();
+
+    Mutated line:
+                 if (_msgSender() == _deposit.owner) revert Staking_Invalid_Owner();
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Staking.sol
+    Line nr: 106
+    Result: Killed
+    Original line:
+                 if (newRewardToken == address(0)) revert Staking_Zero_Address();
+
+    Mutated line:
+                 if (newRewardToken != address(0)) revert Staking_Zero_Address();
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Staking.sol
+    Line nr: 78
+    Result: Killed
+    Original line:
+                 uint96 _withdrawalTimestamp = uint96(_calculatedRewards / DAILY_REWARD * 1 days);
+
+    Mutated line:
+                 uint96 _withdrawalTimestamp = uint96(_calculatedRewards / DAILY_REWARD / 1 days);
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Staking.sol
+    Line nr: 78
+    Result: Killed
+    Original line:
+                 uint96 _withdrawalTimestamp = uint96(_calculatedRewards / DAILY_REWARD * 1 days);
+
+    Mutated line:
+                 uint96 _withdrawalTimestamp = uint96(_calculatedRewards * DAILY_REWARD * 1 days);
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Staking.sol
+    Line nr: 132
+    Result: Lived
+    Original line:
+                 uint256 _timeSinceLastWithdrawal = block.timestamp - _lastRewardWithdrawal; // 1,999,000 - 1,000,000 = 999,000
+
+    Mutated line:
+                 uint256 _timeSinceLastWithdrawal = block.timestamp + _lastRewardWithdrawal; // 1,999,000 - 1,000,000 = 999,000
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Staking.sol
+    Line nr: 133
+    Result: Killed
+    Original line:
+                 uint256 _calculatedRewards = _timeSinceLastWithdrawal / 1 days * DAILY_REWARD; // 999,000 / 100.000 = 9 * 10 ether
+
+    Mutated line:
+                 uint256 _calculatedRewards = _timeSinceLastWithdrawal / 1 days / DAILY_REWARD; // 999,000 / 100.000 = 9 * 10 ether
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Staking.sol
+    Line nr: 133
+    Result: Killed
+    Original line:
+                 uint256 _calculatedRewards = _timeSinceLastWithdrawal / 1 days * DAILY_REWARD; // 999,000 / 100.000 = 9 * 10 ether
+
+    Mutated line:
+                 uint256 _calculatedRewards = _timeSinceLastWithdrawal * 1 days * DAILY_REWARD; // 999,000 / 100.000 = 9 * 10 ether
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Staking.sol
+    Line nr: 79
+    Result: Killed
+    Original line:
+                 _deposit.lastRewardWithdrawal += _withdrawalTimestamp;
+
+    Mutated line:
+                 _deposit.lastRewardWithdrawal -= _withdrawalTimestamp;
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Staking.sol
+    Line nr: 32
+    Result: Error
+    Original line:
+                 if (address(_collection) == address(0)) revert Staking_Zero_Address();
+
+    Mutated line:
+                 if (address(_collection) == address(0)) revert 
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Staking.sol
+    Line nr: 49
+    Result: Error
+    Original line:
+                     revert Staking_Invalid_Caller();
+
+    Mutated line:
+                     revert 
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Staking.sol
+    Line nr: 75
+    Result: Error
+    Original line:
+                 if (_msgSender() != _deposit.owner) revert Staking_Invalid_Owner();
+
+    Mutated line:
+                 if (_msgSender() != _deposit.owner) revert 
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Staking.sol
+    Line nr: 94
+    Result: Error
+    Original line:
+                 if (_msgSender() != _deposit.owner) revert Staking_Invalid_Owner();
+
+    Mutated line:
+                 if (_msgSender() != _deposit.owner) revert 
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Staking.sol
+    Line nr: 106
+    Result: Error
+    Original line:
+                 if (newRewardToken == address(0)) revert Staking_Zero_Address();
+
+    Mutated line:
+                 if (newRewardToken == address(0)) revert 
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Staking.sol
+    Line nr: 31
+    Result: Error
+    Original line:
+             constructor(address _collection) Ownable(_msgSender()) {
+
+    Mutated line:
+             constructor(address _collection)  {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Staking.sol
+    Line nr: 105
+    Result: Killed
+    Original line:
+             function setRewardToken(address newRewardToken) external onlyOwner {
+
+    Mutated line:
+             function setRewardToken(address newRewardToken) external  {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Staking.sol
+    Line nr: 114
+    Result: Killed
+    Original line:
+             function acceptOwnership(address _rewardToken) external onlyOwner {
+
+    Mutated line:
+             function acceptOwnership(address _rewardToken) external  {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Staking.sol
+    Line nr: 120
+    Result: Killed
+    Original line:
+             function transferOwnership(address _rewardToken, address _newOwner) external onlyOwner {
+
+    Mutated line:
+             function transferOwnership(address _rewardToken, address _newOwner) external  {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Collection.sol
+    Line nr: 34
+    Result: Killed
+    Original line:
+                 require(msg.value == MINT_PRICE, "Invalid MINT_PRICE");
+
+    Mutated line:
+                 require(msg.value != MINT_PRICE, "Invalid MINT_PRICE");
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Collection.sol
+    Line nr: 37
+    Result: Error
+    Original line:
+                 require(_currentTokenId < SUPPLY, "CAN NOT mint more than SUPPLY");
+
+    Mutated line:
+                 require(_currentTokenId < SUP <= , "CAN NOT mint more than SUPPLY");
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Collection.sol
+    Line nr: 51
+    Result: Error
+    Original line:
+                 require(msg.value == DISCOUNT_PRICE, "Invalid DISCOUNT_PRICE");
+
+    Mutated line:
+                 require(msg.value == DI != NT_PRICE, "Invalid DISCOUNT_PRICE");
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Collection.sol
+    Line nr: 52
+    Result: Error
+    Original line:
+                 require((ticketCached >> _ticket & uint256(1)) == 1, "Ticket already used");
+
+    Mutated line:
+                 require((ticketCached >> _ticket & uint256(1)) == 1, != cket already used");
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Collection.sol
+    Line nr: 57
+    Result: Error
+    Original line:
+                 require(_currentTokenId < SUPPLY, "CAN NOT mint more than SUPPLY");
+
+    Mutated line:
+                 require(_currentTokenId < SUP <= , "CAN NOT mint more than SUPPLY");
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Collection.sol
+    Line nr: 34
+    Result: Killed
+    Original line:
+                 require(msg.value == MINT_PRICE, "Invalid MINT_PRICE");
+
+    Mutated line:
+                 require(msg.value != MINT_PRICE, "Invalid MINT_PRICE");
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Collection.sol
+    Line nr: 37
+    Result: Error
+    Original line:
+                 require(_currentTokenId < SUPPLY, "CAN NOT mint more than SUPPLY");
+
+    Mutated line:
+                 require(_currentTokenId < SUP >= , "CAN NOT mint more than SUPPLY");
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Collection.sol
+    Line nr: 51
+    Result: Error
+    Original line:
+                 require(msg.value == DISCOUNT_PRICE, "Invalid DISCOUNT_PRICE");
+
+    Mutated line:
+                 require(msg.value == DI != NT_PRICE, "Invalid DISCOUNT_PRICE");
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Collection.sol
+    Line nr: 52
+    Result: Error
+    Original line:
+                 require((ticketCached >> _ticket & uint256(1)) == 1, "Ticket already used");
+
+    Mutated line:
+                 require((ticketCached >> _ticket & uint256(1)) == 1, != cket already used");
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Collection.sol
+    Line nr: 57
+    Result: Error
+    Original line:
+                 require(_currentTokenId < SUPPLY, "CAN NOT mint more than SUPPLY");
+
+    Mutated line:
+                 require(_currentTokenId < SUP >= , "CAN NOT mint more than SUPPLY");
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Collection.sol
+    Line nr: 40
+    Result: Error
+    Original line:
+                 }
+
+    Mutated line:
+          -      }
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Collection.sol
+    Line nr: 52
+    Result: Error
+    Original line:
+                 require((ticketCached >> _ticket & uint256(1)) == 1, "Ticket already used");
+
+    Mutated line:
+                 require((ticketCached >> _ticket & uin | 6(1)) == 1, "Ticket already used");
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Collection.sol
+    Line nr: 52
+    Result: Error
+    Original line:
+                 require((ticketCached >> _ticket & uint256(1)) == 1, "Ticket already used");
+
+    Mutated line:
+                 require((ticketCached >> _t << t & uint256(1)) == 1, "Ticket already used");
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Collection.sol
+    Line nr: 53
+    Result: Error
+    Original line:
+                 ticketCached = ticketCached & ~(uint256(1) << _ticket);
+
+    Mutated line:
+                 ticketCached = ticketCached & ~(u | 256(1) << _ticket);
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Collection.sol
+    Line nr: 53
+    Result: Error
+    Original line:
+                 ticketCached = ticketCached & ~(uint256(1) << _ticket);
+
+    Mutated line:
+                 ticketCached = ticketCached & ~(uint256(1) << _t >> t);
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Collection.sol
+    Line nr: 60
+    Result: Error
+    Original line:
+                 }
+
+    Mutated line:
+          -      }
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Collection.sol
+    Line nr: 26
+    Result: Killed
+    Original line:
+                 _setDefaultRoyalty(_msgSender(), _fee);
+
+    Mutated line:
+                 
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Collection.sol
+    Line nr: 41
+    Result: Error
+    Original line:
+                 _safeMint(_msgSender(), _currentTokenId);
+
+    Mutated line:
+                 _safeM    return _currentTokenId;
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Collection.sol
+    Line nr: 61
+    Result: Error
+    Original line:
+                 _safeMint(_msgSender(), _currentTokenId);
+
+    Mutated line:
+                 _safeM    return _currentTokenId;
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Collection.sol
+    Line nr: 22
+    Result: Error
+    Original line:
+                 Ownable(_msgSender())
+
+    Mutated line:
+                 
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Collection.sol
+    Line nr: 23
+    Result: Error
+    Original line:
+                 ERC721(_name, _symbol)
+
+    Mutated line:
+                 
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/Collection.sol
+    Line nr: 75
+    Result: Error
+    Original line:
+             function withdrawEther() external onlyOwner {
+
+    Mutated line:
+             function withdrawEther() external onlyOw     (bool success,) = msg.sender.call{value: address(this).balance}("");
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/RewardToken.sol
+    Line nr: 10
+    Result: Killed
+    Original line:
+                 _mint(_to, _amount);
+
+    Mutated line:
+                 
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/RewardToken.sol
+    Line nr: 7
+    Result: Error
+    Original line:
+             constructor(string memory _name, string memory _symbol, address _owner) Ownable(_owner) ERC20(_name, _symbol) {}
+
+    Mutated line:
+             constructor(string memory _name, string memory _symbol, address _owner)  ERC20(_name, _symbol) {}
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/RewardToken.sol
+    Line nr: 7
+    Result: Error
+    Original line:
+             constructor(string memory _name, string memory _symbol, address _owner) Ownable(_owner) ERC20(_name, _symbol) {}
+
+    Mutated line:
+             constructor(string memory _name, string memory _symbol, address _owner) Ownable(_owner)  {}
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/RewardToken.sol
+    Line nr: 9
+    Result: Killed
+    Original line:
+             function mint(address _to, uint256 _amount) external onlyOwner {
+
+    Mutated line:
+             function mint(address _to, uint256 _amount) external  {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/PrimeNumbersEnumerable.sol
+    Line nr: 25
+    Result: Killed
+    Original line:
+                         if (tokenNumber == 1) {
+
+    Mutated line:
+                         if (tokenNumber != 1) {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/PrimeNumbersEnumerable.sol
+    Line nr: 30
+    Result: Killed
+    Original line:
+                         if (tokenNumber == 2) {
+
+    Mutated line:
+                         if (tokenNumber != 2) {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/PrimeNumbersEnumerable.sol
+    Line nr: 35
+    Result: Lived
+    Original line:
+                         if (tokenNumber % 2 == 0) {
+
+    Mutated line:
+                         if (tokenNumber % 2 != 0) {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/PrimeNumbersEnumerable.sol
+    Line nr: 44
+    Result: Killed
+    Original line:
+                             if (tokenNumber % j == 0) {
+
+    Mutated line:
+                             if (tokenNumber % j != 0) {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/PrimeNumbersEnumerable.sol
+    Line nr: 43
+    Result: Killed
+    Original line:
+                         for (uint256 j = 3; j * j <= tokenNumber; j = j + 2) {
+
+    Mutated line:
+                         for (uint256 j = 3; j * j < tokenNumber; j = j + 2) {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/PrimeNumbersEnumerable.sol
+    Line nr: 20
+    Result: Killed
+    Original line:
+                 for (uint256 i = 0; i < balanceOfOwner;) {
+
+    Mutated line:
+                 for (uint256 i = 0; i <= balanceOfOwner;) {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/PrimeNumbersEnumerable.sol
+    Line nr: 25
+    Result: Killed
+    Original line:
+                         if (tokenNumber == 1) {
+
+    Mutated line:
+                         if (tokenNumber != 1) {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/PrimeNumbersEnumerable.sol
+    Line nr: 30
+    Result: Killed
+    Original line:
+                         if (tokenNumber == 2) {
+
+    Mutated line:
+                         if (tokenNumber != 2) {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/PrimeNumbersEnumerable.sol
+    Line nr: 35
+    Result: Lived
+    Original line:
+                         if (tokenNumber % 2 == 0) {
+
+    Mutated line:
+                         if (tokenNumber % 2 != 0) {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/PrimeNumbersEnumerable.sol
+    Line nr: 44
+    Result: Killed
+    Original line:
+                             if (tokenNumber % j == 0) {
+
+    Mutated line:
+                             if (tokenNumber % j != 0) {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/PrimeNumbersEnumerable.sol
+    Line nr: 43
+    Result: Killed
+    Original line:
+                         for (uint256 j = 3; j * j <= tokenNumber; j = j + 2) {
+
+    Mutated line:
+                         for (uint256 j = 3; j * j > tokenNumber; j = j + 2) {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/PrimeNumbersEnumerable.sol
+    Line nr: 20
+    Result: Killed
+    Original line:
+                 for (uint256 i = 0; i < balanceOfOwner;) {
+
+    Mutated line:
+                 for (uint256 i = 0; i >= balanceOfOwner;) {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/PrimeNumbersEnumerable.sol
+    Line nr: 43
+    Result: Killed
+    Original line:
+                         for (uint256 j = 3; j * j <= tokenNumber; j = j + 2) {
+
+    Mutated line:
+                         for (uint256 j = 3; j / j <= tokenNumber; j = j + 2) {
+
+
+Mutation:
+    File: /home/georgi/Rareskills-Solidity-Bootcamp/Week2/src/PrimeNumbersEnumerable.sol
+    Line nr: 43
+    Result: Killed
+    Original line:
+                         for (uint256 j = 3; j * j <= tokenNumber; j = j + 2) {
+
+    Mutated line:
+                         for (uint256 j = 3; j * j <= tokenNumber; j = j - 2) {
+
+
