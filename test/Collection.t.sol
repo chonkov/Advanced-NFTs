@@ -50,15 +50,31 @@ contract CollectionTest is Test {
         proofs[6] = keccak256(abi.encode(user7, 7));
         proofs[7] = keccak256(abi.encode(user8, 8));
 
-        proofs[8] = keccak256(abi.encode(proofs[0], proofs[1]));
-        proofs[9] = keccak256(abi.encode(proofs[2], proofs[3]));
-        proofs[10] = keccak256(abi.encode(proofs[4], proofs[5]));
-        proofs[11] = keccak256(abi.encode(proofs[6], proofs[7]));
+        proofs[8] = proofs[0] < proofs[1]
+            ? keccak256(abi.encode(proofs[0], proofs[1]))
+            : keccak256(abi.encode(proofs[1], proofs[0]));
+        proofs[9] = proofs[2] < proofs[3]
+            ? keccak256(abi.encode(proofs[2], proofs[3]))
+            : keccak256(abi.encode(proofs[3], proofs[2]));
+        proofs[10] = proofs[4] < proofs[5]
+            ? keccak256(abi.encode(proofs[4], proofs[5]))
+            : keccak256(abi.encode(proofs[5], proofs[4]));
+        proofs[11] = proofs[6] < proofs[7]
+            ? keccak256(abi.encode(proofs[6], proofs[7]))
+            : keccak256(abi.encode(proofs[7], proofs[6]));
 
-        proofs[12] = keccak256(abi.encode(proofs[8], proofs[9]));
-        proofs[13] = keccak256(abi.encode(proofs[10], proofs[11]));
+        proofs[12] = proofs[8] < proofs[9]
+            ? keccak256(abi.encode(proofs[8], proofs[9]))
+            : keccak256(abi.encode(proofs[9], proofs[8]));
+        proofs[13] = proofs[10] < proofs[11]
+            ? keccak256(abi.encode(proofs[10], proofs[11]))
+            : keccak256(abi.encode(proofs[11], proofs[10]));
 
-        return keccak256(abi.encode(proofs[12], proofs[13]));
+        bytes32 root = proofs[12] < proofs[13]
+            ? keccak256(abi.encode(proofs[12], proofs[13]))
+            : keccak256(abi.encode(proofs[13], proofs[12]));
+
+        return root;
     }
 
     function updateMerkleProofUser1() public {
@@ -132,8 +148,8 @@ contract CollectionTest is Test {
         vm.expectRevert("Invalid MINT_PRICE");
         collection.mint{value: (1 ether + 1)}();
 
-        vm.store(address(collection), bytes32(uint256(11)), bytes32(uint256(21)));
-        assertEq(collection.currentTokenId(), 21);
+        vm.store(address(collection), bytes32(uint256(11)), bytes32(uint256(22)));
+        assertEq(collection.currentTokenId(), 22);
         vm.prank(owner);
         vm.expectRevert("CAN NOT mint more than SUPPLY");
         collection.mint{value: 1 ether}();

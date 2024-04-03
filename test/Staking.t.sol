@@ -67,12 +67,12 @@ contract StakingTest is Test {
         collection.safeTransferFrom(owner, address(staking), 2);
 
         uint256 currentTimestamp = block.timestamp;
-        uint256 calculatedRewards = staking.calculateRewards(currentTimestamp);
+        (uint256 calculatedRewards,) = staking.calculateRewards(currentTimestamp);
         assertEq(calculatedRewards, 0);
 
         vm.warp(currentTimestamp + 1 days);
 
-        calculatedRewards = staking.calculateRewards(currentTimestamp);
+        (calculatedRewards,) = staking.calculateRewards(currentTimestamp);
         assertEq(calculatedRewards, 10 ether);
 
         currentTimestamp = block.timestamp;

@@ -75,9 +75,9 @@ contract Staking is Ownable2Step, IERC721Receiver {
         address _rewardToken = rewardToken;
         if (_msgSender() != _deposit.owner) revert Staking_Invalid_Owner();
 
-        uint256 _calculatedRewards = calculateRewards(_deposit.lastRewardWithdrawal);
-        uint96 _withdrawalTimestamp = uint96(_calculatedRewards / DAILY_REWARD * 1 days);
-        _deposit.lastRewardWithdrawal += _withdrawalTimestamp;
+        (uint256 _calculatedRewards, uint256 _timeSinceLastWithdrawal) = calculateRewards(_deposit.lastRewardWithdrawal);
+        // uint96 _withdrawalTimestamp = uint96(block.timestamp - _deposit.lastRewardWithdrawal);
+        _deposit.lastRewardWithdrawal += uint96(_timeSinceLastWithdrawal);
 
         deposits[_tokenId] = _deposit;
 
@@ -94,7 +94,7 @@ contract Staking is Ownable2Step, IERC721Receiver {
         Deposit memory _deposit = deposits[_tokenId];
         if (_msgSender() != _deposit.owner) revert Staking_Invalid_Owner();
 
-        uint256 _calculatedRewards = calculateRewards(_deposit.lastRewardWithdrawal);
+        (uint256 _calculatedRewards,) = calculateRewards(_deposit.lastRewardWithdrawal);
         delete deposits[_tokenId];
 
         RewardToken(rewardToken).mint(_msgSender(), _calculatedRewards);
@@ -127,11 +127,11 @@ contract Staking is Ownable2Step, IERC721Receiver {
      * @param _lastRewardWithdrawal Starting point for the calculation
      * @return The calculated reward
      */
-    function calculateRewards(uint256 _lastRewardWithdrawal) public view returns (uint256) {
+    function calculateRewards(uint256 _lastRewardWithdrawal) public view returns (uint256, uint256) {
         // Let's assume as an exaple that block.timestamp == 1,900,000 and _lastRewardWithdrawal == 1,000,000
         // and one day has 100,000 second, rather than 86,400. DAILY_REWARD == 10 ether or 10 tokens per day (token has 18 decimals)
         uint256 _timeSinceLastWithdrawal = block.timestamp - _lastRewardWithdrawal; // 1,999,000 - 1,000,000 = 999,000
         uint256 _calculatedRewards = _timeSinceLastWithdrawal / 1 days * DAILY_REWARD; // 999,000 / 100.000 = 9 * 10 ether
-        return _calculatedRewards;
+        return (_calculatedRewards, _timeSinceLastWithdrawal);
     }
 }
