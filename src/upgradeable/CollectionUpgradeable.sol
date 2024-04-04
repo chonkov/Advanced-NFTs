@@ -8,8 +8,9 @@ import {
     Ownable2StepUpgradeable,
     OwnableUpgradeable
 } from "lib/openzeppelin-contracts-upgradeable/contracts/access/Ownable2StepUpgradeable.sol";
+import {UUPSUpgradeable} from "lib/openzeppelin-contracts-upgradeable/contracts/proxy/utils/UUPSUpgradeable.sol";
 
-contract Collection is Ownable2StepUpgradeable, ERC721Upgradeable, ERC2981Upgradeable {
+contract CollectionUpgradeable is Ownable2StepUpgradeable, ERC721Upgradeable, ERC2981Upgradeable, UUPSUpgradeable {
     using MerkleProof for bytes32[];
 
     event Withdrawal(address owner); // add address, because owner could be changed later
@@ -20,6 +21,10 @@ contract Collection is Ownable2StepUpgradeable, ERC721Upgradeable, ERC2981Upgrad
     bytes32 public merkleRoot;
     uint256 public ticket;
     uint256 public currentTokenId;
+
+    constructor() {
+        _disableInitializers();
+    }
 
     function initialize(
         string memory _name,
@@ -34,6 +39,7 @@ contract Collection is Ownable2StepUpgradeable, ERC721Upgradeable, ERC2981Upgrad
     ) external initializer {
         __Ownable_init(_msgSender());
         __ERC721_init(_name, _symbol);
+        __UUPSUpgradeable_init();
 
         supply = _supply;
         mintPrice = _mintPrice;
@@ -43,6 +49,8 @@ contract Collection is Ownable2StepUpgradeable, ERC721Upgradeable, ERC2981Upgrad
         currentTokenId = _currentTokenId;
         _setDefaultRoyalty(_msgSender(), _fee);
     }
+
+    function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
 
     /**
      * @notice Mint NFT with price = mintPrice (1 ether)

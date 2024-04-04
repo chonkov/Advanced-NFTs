@@ -7,9 +7,10 @@ import {
     Ownable2StepUpgradeable,
     OwnableUpgradeable
 } from "lib/openzeppelin-contracts-upgradeable/contracts/access/Ownable2StepUpgradeable.sol";
+import {UUPSUpgradeable} from "lib/openzeppelin-contracts-upgradeable/contracts/proxy/utils/UUPSUpgradeable.sol";
 import {RewardTokenUpgradeable} from "./RewardTokenUpgradeable.sol";
 
-contract Staking is Ownable2StepUpgradeable, IERC721Receiver {
+contract StakingUpgradeable is Ownable2StepUpgradeable, IERC721Receiver, UUPSUpgradeable {
     // Using uint96 in order to occupy only 1 slot. Max uint96 is high enough to do not allow overflow
     struct Deposit {
         address owner;
@@ -31,12 +32,20 @@ contract Staking is Ownable2StepUpgradeable, IERC721Receiver {
     address public rewardToken;
     mapping(uint256 => Deposit) public deposits;
 
+    constructor() {
+        _disableInitializers();
+    }
+
     function initialize(uint256 _dailyReward, address _collection, address _rewardToken) external initializer {
         __Ownable_init(_msgSender());
+        __UUPSUpgradeable_init();
+
         dailyReward = _dailyReward;
         collection = _collection;
         rewardToken = _rewardToken;
     }
+
+    function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
 
     /**
      * @notice Allows the transfer of an NFT
